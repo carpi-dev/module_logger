@@ -7,11 +7,11 @@
 #include "ui_logger.h"
 #endif
 
-Logger::Logger(QWidget *parent): QWidget(parent),
+Logger::Logger(QWidget *parent): QWidget(parent)
 #ifdef LOGGER_LOADABLE
-ui(new Ui::Logger),
+,ui(new Ui::Logger)
 #endif
-logCurrentLines(0)
+,logCurrentLines(0)
 {
 #ifdef LOGGER_LOADABLE
     ui->setupUi(this);
