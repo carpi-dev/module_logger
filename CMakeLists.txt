@@ -6,6 +6,7 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
 endif()
 
 set(CMAKE_CXX_STANDARD 11)
+add_compile_definitions(LOGGER_LOADABLE)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)

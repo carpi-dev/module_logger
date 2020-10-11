@@ -5,7 +5,9 @@
 #ifndef CARPI_QT_SYSTEMINFO_H
 #define CARPI_QT_SYSTEMINFO_H
 
+#ifdef LOGGER_LOADABLE
 #include "Logger_global.h"
+#endif
 
 #include <QDir>
 #include <QFile>
@@ -26,9 +28,11 @@
 #define TAG_INFO    " INFO  "
 #define TAG_DEBUG   " DEBUG "
 
+#ifdef LOGGER_LOADABLE
 QT_BEGIN_NAMESPACE
 namespace Ui { class Logger; }
 QT_END_NAMESPACE
+#endif
 
 enum Priority {
     LOG_DEBUG = 0, LOG_VERBOSE, LOG_WARNING, LOG_ERROR
@@ -38,7 +42,9 @@ class Logger : public QWidget
 {
 Q_OBJECT
 private:
+#ifdef LOGGER_LOADABLE
     Ui::Logger *ui;
+#endif
     QSettings *settings;
     QString logDirectory;
     QString logDateFormat;
@@ -58,9 +64,10 @@ public:
     void info(const QString& module, const QString& msg);
     void debug(const QString& module, const QString& msg);
 
-    QString getCurrentLogFile(int suffix=0);
+    void getCurrentLogFile(int suffix=0);
 };
 
+#ifdef LOGGER_LOADABLE
 extern "C" {
     LOGGER_EXPORT char* getName();
     LOGGER_EXPORT QWidget* create();
@@ -68,6 +75,6 @@ extern "C" {
     LOGGER_EXPORT QStringList getDependencies();
     LOGGER_EXPORT QSettings *getSettings();
 };
-
+#endif
 
 #endif //CARPI_QT_SYSTEMINFO_H

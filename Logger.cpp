@@ -3,12 +3,19 @@
 //
 
 #include "Logger.h"
+#ifdef LOGGER_LOADABLE
 #include "ui_logger.h"
+#endif
 
-
-Logger::Logger(QWidget *parent): QWidget(parent), ui(new Ui::Logger), logCurrentLines(0)
+Logger::Logger(QWidget *parent): QWidget(parent),
+#ifdef LOGGER_LOADABLE
+ui(new Ui::Logger),
+#endif
+logCurrentLines(0)
 {
+#ifdef LOGGER_LOADABLE
     ui->setupUi(this);
+#endif
     settings = new QSettings("carpi", "logger", this);
     logDirectory = settings->value(KEY_LOG_DIRECTORY, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).append("/log/")).toString();
     logDateFormat = settings->value(KEY_LOG_DATE_FORMAT, DATETIME_FORMAT).toString();
@@ -61,7 +68,7 @@ void Logger::debug(const QString& module, const QString &msg) {
     log(module, LOG_DEBUG, msg);
 }
 
-QString Logger::getCurrentLogFile(int suffix) {
+void Logger::getCurrentLogFile(int suffix) {
     QDir dir(logDirectory);
     if(!dir.exists()) dir.mkpath(logDirectory);
     logFile = new QFile(QDateTime::currentDateTime().toString(DATETIME_FORMAT)
@@ -75,6 +82,7 @@ QString Logger::getCurrentLogFile(int suffix) {
     }
 }
 
+#ifdef LOGGER_LOADABLE
 extern "C" LOGGER_EXPORT QWidget* create() {
     return new Logger();
 }
@@ -90,3 +98,4 @@ extern "C" LOGGER_EXPORT QStringList getSettingsKeys(){
 extern "C" LOGGER_EXPORT QStringList getDependencies(){
     return QStringList() << "settings";
 }
+#endif
